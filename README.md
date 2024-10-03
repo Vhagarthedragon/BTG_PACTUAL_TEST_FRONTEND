@@ -3,6 +3,8 @@
 Prueba Tecnica BTG PACTUAL
 Este proyecto contiene una aplicación de React que se despliega en AWS utilizando CloudFormation. A continuación, se presentan los pasos necesarios para preparar y desplegar la aplicación.
 
+LINK DEL FRONT http://btg-bucket.s3-website-us-east-1.amazonaws.com/
+
 ## Requisitos Previos
 
 - Tener una cuenta de AWS.
