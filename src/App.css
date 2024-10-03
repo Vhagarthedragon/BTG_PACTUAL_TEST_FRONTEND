@@ -1,38 +1,66 @@
-.App {
-  text-align: center;
+/* src/App.css */
+
+:root {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --navbar-background: #1f1f1f;
+  --list-background: #1e1e1e;
+  --button-background: #61dafb;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.light-theme {
+  --background-color: #ffffff;  /* Color de fondo claro */
+  --text-color: #000000;        /* Color de texto oscuro */
+  --navbar-background: #f8f9fa; /* Fondo claro para la barra de navegación */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.container {
+  margin-top: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+h1, h2, h3 {
+  color: var(--text-color);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar {
+  background-color: var(--navbar-background);
+}
+
+.navbar-brand, .nav-link {
+  color: var(--text-color) !important;
+}
+
+.nav-link:hover {
+  color: var(--button-background) !important;
+}
+
+.list-group-item {
+  background-color: var(--list-background);
+  color: var(--text-color);
+  border: 1px solid #333;
+}
+
+.list-group-item:hover {
+  background-color: #333;
+}
+
+.form-label, .form-control {
+  color: var(--text-color);
+  background-color: var(--list-background);
+  border: 1px solid #333;
+}
+
+.btn {
+  background-color: var(--button-background);
+  color: #121212;
+}
+
+.btn:hover {
+  background-color: #4db8e1;
 }
