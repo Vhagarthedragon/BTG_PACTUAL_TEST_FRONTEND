@@ -1,109 +1,70 @@
+# Getting Started with Create React App
 
-# Proyecto de Despliegue de Aplicación React en AWS, Prueba Tecnica BTG PACTUAL
-Prueba Tecnica BTG PACTUAL
-Este proyecto contiene una aplicación de React que se despliega en AWS utilizando CloudFormation. A continuación, se presentan los pasos necesarios para preparar y desplegar la aplicación.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-LINK DEL FRONT http://btg-bucket.s3-website-us-east-1.amazonaws.com/
+## Available Scripts
 
-## Requisitos Previos
+In the project directory, you can run:
 
-- Tener una cuenta de AWS.
-- Tener AWS CLI instalado y configurado.
-- Tener Node.js y npm instalados.
+### `npm start`
 
-## Preparar la Aplicación de React
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-1. Clona el repositorio:
-   ```bash
-   git clone <tu-repositorio>
-   cd <tu-repositorio>
-   ```
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
+### `npm test`
 
-3. Construye la aplicación:
-   ```bash
-   npm run build
-   ```
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-Esto generará una carpeta `build` que contiene la versión optimizada de tu aplicación.
+### `npm run build`
 
-## Subir los Archivos a un Bucket de S3
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-1. Crea un bucket de S3:
-   ```bash
-   aws s3 mb s3://nombre-del-bucket
-   ```
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-2. Sube la carpeta `build` a tu bucket de S3:
-   ```bash
-   aws s3 sync build/ s3://nombre-del-bucket
-   ```
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Configurar el Archivo de CloudFormation
+### `npm run eject`
 
-Asegúrate de tener un archivo YAML de CloudFormation configurado para crear el bucket de S3 y, opcionalmente, una distribución de CloudFront. Aquí tienes un ejemplo básico:
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-```yaml
-AWSTemplateFormatVersion: '2010-09-09'
-Description: Despliegue de una aplicación React en S3
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Resources:
-  MyS3Bucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      BucketName: nombre-del-bucket
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: index.html
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-  S3BucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      Bucket: !Ref MyS3Bucket
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Sub 'arn:aws:s3:::${MyS3Bucket}/*'
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-Outputs:
-  WebsiteURL:
-    Description: URL del sitio web
-    Value: !GetAtt MyS3Bucket.WebsiteURL
-```
+## Learn More
 
-## Desplegar la Plantilla de CloudFormation
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-Puedes desplegar la plantilla de CloudFormation utilizando la consola de AWS o la AWS CLI. Si usas la CLI, el comando sería:
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-```bash
-aws cloudformation create-stack --stack-name nombre-del-stack --template-body file://ruta/a/tu/template.yaml
-```
+### Code Splitting
 
-Reemplaza `ruta/a/tu/template.yaml` con la ruta al archivo YAML de tu plantilla.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-## Esperar a que se Complete el Despliegue
+### Analyzing the Bundle Size
 
-Puedes comprobar el progreso del despliegue en la consola de CloudFormation o utilizando el siguiente comando:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-```bash
-aws cloudformation describe-stacks --stack-name nombre-del-stack
-```
+### Making a Progressive Web App
 
-## Acceder a la Aplicación
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-Una vez que la pila esté creada con éxito, puedes acceder a tu aplicación en la URL proporcionada en la salida, que se verá algo como esto:
+### Advanced Configuration
 
-```
-http://nombre-del-bucket.s3-website-us-east-1.amazonaws.com
-```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-## Resumen
+### Deployment
 
-Siguiendo estos pasos, deberías poder desplegar tu aplicación de React en AWS utilizando CloudFormation. La clave es crear un bucket de S3, subir los archivos generados y configurar adecuadamente la plantilla de CloudFormation.
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

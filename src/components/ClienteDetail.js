@@ -1,42 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import { getClienteDetail, getTransaccionesPorCliente, getProductos } from '../services/api';
+import { getClienteDetail, getTransaccionesPorCliente, getProductos, cancelarTransaccion } from '../services/api';
 
 const ClienteDetail = ({ clienteId, onClose }) => {
     const [cliente, setCliente] = useState(null);
     const [transacciones, setTransacciones] = useState([]);
-    const [productos, setProductos] = useState([]);  // Estado para almacenar productos
+    const [productos, setProductos] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchClienteDetail();
-        fetchTransacciones();
-        fetchProductos();  // Llama a la función para obtener productos
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                await fetchClienteDetail();
+                await fetchTransacciones();
+                await fetchProductos();
+            } catch (err) {
+                setError("Error al cargar los datos.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
     }, [clienteId]);
 
     const fetchClienteDetail = async () => {
-        try {
-            const response = await getClienteDetail(clienteId);
-            setCliente(response.data);
-        } catch (error) {
-            console.error("Error al obtener detalles del cliente:", error);
-        }
+        const response = await getClienteDetail(clienteId);
+        setCliente(response.data);
     };
 
     const fetchTransacciones = async () => {
-        try {
-            const response = await getTransaccionesPorCliente(clienteId);
-            console.log("Registros de Inscripción a productos obtenidos:", response.data);
-            setTransacciones(response.data);
-        } catch (error) {
-            console.error("Error al obtener transacciones del cliente:", error);
-        }
+        const response = await getTransaccionesPorCliente(clienteId);
+        setTransacciones(response.data);
     };
 
     const fetchProductos = async () => {
+        const response = await getProductos();
+        setProductos(response.data);
+    };
+
+    const handleCancelarTransaccion = async (transaccionId) => {
         try {
-            const response = await getProductos();  // Obtener todos los productos
-            setProductos(response.data);  // Almacenar en el estado
+            const data = {
+                id: transaccionId,
+                cliente_id: clienteId,
+            };
+            await cancelarTransaccion(data);
+            await fetchTransacciones(); // Actualiza la lista de transacciones
         } catch (error) {
-            console.error("Error al obtener productos:", error);
+            setError("Error al cancelar la transacción.");
         }
     };
 
@@ -47,7 +61,11 @@ const ClienteDetail = ({ clienteId, onClose }) => {
                 <button className="btn btn-close" onClick={onClose}></button>
             </div>
             <div className="card-body">
-                {cliente ? (
+                {loading ? (
+                    <p>Cargando detalles del cliente...</p>
+                ) : error ? (
+                    <p className="text-danger">{error}</p>
+                ) : cliente ? (
                     <>
                         <p><strong>Nombre:</strong> {cliente.nombre}</p>
                         <p><strong>Apellidos:</strong> {cliente.apellidos}</p>
@@ -58,12 +76,19 @@ const ClienteDetail = ({ clienteId, onClose }) => {
                         {transacciones.length > 0 ? (
                             <ul>
                                 {transacciones.map(transaccion => {
-                                    // Busca el nombre del producto usando el producto_id
                                     const producto = productos.find(p => p.id === transaccion.producto_id);
                                     return (
-                                        <li key={transaccion.fecha}>
-                                            {transaccion.fecha} - Monto: {transaccion.monto} -
+                                        <li key={transaccion.id}>
+                                            {transaccion.fecha} - Monto: {transaccion.monto} - estado: {transaccion.tipo} - 
                                             Producto: {producto ? producto.nombre : 'Desconocido'}
+                                            {transaccion.tipo !== 'afiliacion cancelada' && (
+                                                <button 
+                                                    className="btn btn-danger btn-sm float-right" 
+                                                    onClick={() => handleCancelarTransaccion(transaccion.id)}
+                                                >
+                                                    Cancelar
+                                                </button>
+                                            )}
                                         </li>
                                     );
                                 })}
@@ -73,7 +98,7 @@ const ClienteDetail = ({ clienteId, onClose }) => {
                         )}
                     </>
                 ) : (
-                    <p>Cargando detalles del cliente...</p>
+                    <p>No se encontraron detalles del cliente.</p>
                 )}
             </div>
         </div>

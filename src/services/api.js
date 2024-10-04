@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Configura la base URL de tu backend de FastAPI
 const API = axios.create({
-    baseURL: 'http://127.0.0.1:8000'
+    baseURL: 'http://18.235.234.197'
 });
 
 // Endpoints de Clientes
@@ -25,7 +25,11 @@ export const createProducto = (producto) => API.post('/productos/', producto);
 
 // Endpoints de Transacciones
 export const getTransaccionesPorCliente = (clienteId) => API.get(`/transacciones/${clienteId}`);
-export const registrarTransaccion = (clienteId) => API.post('/transacciones/', clienteId); 
+export const registrarTransaccion = (clienteId) => API.post('/transacciones/', clienteId);
+// Cambia la función de cancelar transacción
+export const cancelarTransaccion = (data) => API.post('/transacciones/cancelar', data);
+
+
 
 
 // Endpoints de Disponibilidad
